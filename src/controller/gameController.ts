@@ -6,15 +6,15 @@ import { GameUpdateBody } from "../models/types/game/GameUpdateBody";
 export class GameController extends Controller {
   GameService = new GameService();
 
-  // @Get("/all")
-  // public async getAllIceBreaker(): Promise<any> {
-  //   try {
-  //     return this.IcebreakerService.getAllIcebreaker();
-  //   } catch (err: any) {
-  //     this.setStatus(err.status);
-  //     return err;
-  //   }
-  // }
+  @Get("/leaderboard")
+  public async getLeaderboard(): Promise<any> {
+    try {
+      return this.GameService.getLeaderboard();
+    } catch (err: any) {
+      this.setStatus(err.status);
+      return err;
+    }
+  }
 
   @Post("")
   public async createGame(@Body() game: any) {
@@ -31,6 +31,7 @@ export class GameController extends Controller {
     try {
       return await this.GameService.updateGame(game);
     } catch (err: any) {
+      console.log(err);
       this.setStatus(err.status);
       return err;
     }

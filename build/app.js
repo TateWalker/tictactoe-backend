@@ -11,7 +11,7 @@ const cors_1 = __importDefault(require("cors"));
 require("reflect-metadata");
 exports.app = (0, express_1.default)();
 // Use body parser to read sent json payloads
-// const whiteList = ["https://games.kraftylab.com"];
+// const whiteList = ["https://games.tatewalker.com"];
 // const corsOptions = {
 //   origin: function (origin: any, callback: any) {
 //     if (whiteList.indexOf(origin) !== -1) {
@@ -34,6 +34,7 @@ exports.app.use(body_parser_1.default.json());
 (0, routes_1.RegisterRoutes)(exports.app);
 exports.app.use(function errorHandler(err, req, res, next) {
     if (err instanceof Error) {
+        console.log(err);
         return res.status(500).json({
             message: "Internal Server Error",
         });

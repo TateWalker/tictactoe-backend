@@ -2,6 +2,7 @@ import sequelize from "sequelize/types/sequelize";
 import db from "../models";
 import { GameAttributes } from "../models/game";
 import { ResponseMessages } from "../models/ResponseMessagesEnum";
+import { Op } from "sequelize";
 
 const Game = require("../models/game")(db.sequelize, db.Sequelize.DataTypes);
 
@@ -29,20 +30,46 @@ export class GameService {
   }
 
   public async getLeaderboard(): Promise<any> {
+    let topFive: any = {};
+
+    const addToLeaderboard = (player: any) => {
+      if (topFive[`${player.name}`]) {
+        topFive[`${player.name}`] += 1;
+      } else {
+        topFive[`${player.name}`] = 1;
+      }
+    };
+
     try {
-      // const icebreaker = await Icebreaker.findOne({
-      //   where: whereStatement,
-      //   order: db.sequelize.random(),
-      // });
-      // if (typeof icebreaker !== "undefined" && icebreaker !== null) {
-      //   icebreaker.dataValues.color = this.getRandomColor();
-      //   return icebreaker;
-      // } else {
-      //   throw new Error(`Failed to get icebreaker`);
-      // }
+      const games = await Game.findAll({
+        where: {
+          winner: {
+            [Op.ne]: null,
+          },
+        },
+      });
+      for (let game of games) {
+        if (game.winner == "x") {
+          addToLeaderboard(game.user1);
+        } else {
+          addToLeaderboard(game.user2);
+        }
+      }
+      let leaderboard = [];
+      for (let wins in topFive) {
+        leaderboard.push([wins, topFive[wins]]);
+      }
+      leaderboard.sort((a: any, b: any) => {
+        return b[1] - a[1];
+      });
+      if (leaderboard.length >= 5) {
+        return leaderboard.slice(0, 5);
+      } else {
+        return leaderboard;
+      }
     } catch (error: any) {
       console.log(error);
-      throw { status: 500, message: ResponseMessages.ICEBREAKER_NOT_FOUND };
+      throw { status: 500, message: ResponseMessages.LEADERBOARD_ERROR };
     }
   }
 
@@ -50,7 +77,7 @@ export class GameService {
     try {
       const result = await Game.update(game, {
         where: {
-          id: game.id,
+          code: game.code,
         },
         returning: true,
         plain: true,
@@ -68,39 +95,4 @@ export class GameService {
       };
     }
   }
-
-  // public async getIcebreakerCategories(): Promise<any> {
-  //   try {
-  //     let categories: any = {};
-  //     let realCategories: any = {};
-  //     let finalCategories: any = {};
-  //     const icebreakers = await Icebreaker.findAll();
-  //     if (icebreakers && icebreakers.length > 0) {
-  //       for (let icebreaker of icebreakers) {
-  //         categories[`${icebreaker.category}`] = [];
-  //       }
-  //       for (let icebreaker of icebreakers) {
-  //         categories[`${icebreaker.category}`].push(icebreaker.subcategory);
-  //       }
-  //       for (let cat in categories) {
-  //         realCategories[`${cat}`] = new Set(categories[`${cat}`]);
-  //       }
-  //       for (let cat in realCategories) {
-  //         finalCategories[`${cat}`] = Array.from(
-  //           realCategories[`${cat}`].values()
-  //         );
-  //       }
-  //       let response = {
-  //         categories: Object.keys(finalCategories),
-  //         subcategories: finalCategories,
-  //       };
-  //       return response;
-  //     } else {
-  //       throw new Error(`Failed to get icebreakers`);
-  //     }
-  //   } catch (error: any) {
-  //     console.error(error.name);
-  //     throw { status: 500, message: ResponseMessages.CATEGORIES_NOT_FOUND };
-  //   }
-  // }
 }

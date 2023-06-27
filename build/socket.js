@@ -51,30 +51,26 @@ exports.default = (httpServer) => {
                 socket.to(gameRoom).emit("on_user_joined", message);
             }
         }));
-        socket.on("update_users", (message) => {
-            console.log("Updating user list");
+        socket.on("update_opponent", (message) => {
             const gameRoom = getSocketGameRoom(socket);
-            socket.to(gameRoom).emit("on_updated_users", message);
+            socket.to(gameRoom).emit("on_updated_opponent", message);
         });
         // Game logic
-        socket.on("update_game", (message) => {
-            const gameRoom = getSocketGameRoom(message);
-            socket.to(gameRoom).emit("on_game_update", message);
+        socket.on("play_turn", (message) => {
+            const gameRoom = getSocketGameRoom(socket);
+            socket.to(gameRoom).emit("on_turn_played", message);
         });
         socket.on("start_game", (message) => {
             const gameRoom = getSocketGameRoom(socket);
+            console.log(gameRoom);
+            console.log(message);
             socket.to(gameRoom).emit("game_started", message);
-        });
-        socket.on("change_category", (message) => {
-            const gameRoom = getSocketGameRoom(socket);
-            socket.to(gameRoom).emit("category_changed", message);
-        });
-        socket.on("submit_answer", (message) => {
-            const gameRoom = getSocketGameRoom(socket);
-            socket.to(gameRoom).emit("on_answer_submitted", message);
         });
         socket.on("end_round", (message) => {
             const gameRoom = getSocketGameRoom(socket);
+            if (message.winner !== null) {
+                message.winner = !message.winner;
+            }
             socket.to(gameRoom).emit("round_ended", message);
         });
         socket.on("new_round", (message) => {

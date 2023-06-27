@@ -13,7 +13,7 @@ export interface GameAttributes {
   code: string;
   user1: User;
   user2: User;
-  board: string[];
+  board: any;
   winner?: string;
 }
 
@@ -23,7 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     code!: string;
     user1!: User;
     user2!: User;
-    board!: string[];
+    board!: any;
     winner?: string;
   }
   Game.init(

@@ -41,12 +41,7 @@
 					"user2": {
 						"$ref": "#/components/schemas/User"
 					},
-					"board": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
+					"board": {},
 					"winner": {
 						"type": "string"
 					}
@@ -67,6 +62,23 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/game/leaderboard": {
+			"get": {
+				"operationId": "GetLeaderboard",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/game": {
 			"post": {
 				"operationId": "CreateGame",

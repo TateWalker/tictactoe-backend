@@ -48,16 +48,15 @@ export default (httpServer: any) => {
     });
 
     socket.on("update_opponent", (message) => {
-      console.log("Updating opponent");
       const gameRoom = getSocketGameRoom(socket);
       socket.to(gameRoom).emit("on_updated_opponent", message);
     });
 
     // Game logic
 
-    socket.on("update_game", (message) => {
-      const gameRoom = getSocketGameRoom(message);
-      socket.to(gameRoom).emit("on_game_update", message);
+    socket.on("play_turn", (message) => {
+      const gameRoom = getSocketGameRoom(socket);
+      socket.to(gameRoom).emit("on_turn_played", message);
     });
 
     socket.on("start_game", (message) => {
@@ -67,18 +66,11 @@ export default (httpServer: any) => {
       socket.to(gameRoom).emit("game_started", message);
     });
 
-    socket.on("change_category", (message) => {
-      const gameRoom = getSocketGameRoom(socket);
-      socket.to(gameRoom).emit("category_changed", message);
-    });
-
-    socket.on("submit_answer", (message) => {
-      const gameRoom = getSocketGameRoom(socket);
-      socket.to(gameRoom).emit("on_answer_submitted", message);
-    });
-
     socket.on("end_round", (message) => {
       const gameRoom = getSocketGameRoom(socket);
+      if (message.winner !== null) {
+        message.winner = !message.winner;
+      }
       socket.to(gameRoom).emit("round_ended", message);
     });
 

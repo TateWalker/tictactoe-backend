@@ -29,15 +29,17 @@ let GameController = class GameController extends tsoa_1.Controller {
         super(...arguments);
         this.GameService = new gameService_1.GameService();
     }
-    // @Get("/all")
-    // public async getAllIceBreaker(): Promise<any> {
-    //   try {
-    //     return this.IcebreakerService.getAllIcebreaker();
-    //   } catch (err: any) {
-    //     this.setStatus(err.status);
-    //     return err;
-    //   }
-    // }
+    getLeaderboard() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return this.GameService.getLeaderboard();
+            }
+            catch (err) {
+                this.setStatus(err.status);
+                return err;
+            }
+        });
+    }
     createGame(game) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -55,6 +57,7 @@ let GameController = class GameController extends tsoa_1.Controller {
                 return yield this.GameService.updateGame(game);
             }
             catch (err) {
+                console.log(err);
                 this.setStatus(err.status);
                 return err;
             }
@@ -72,6 +75,12 @@ let GameController = class GameController extends tsoa_1.Controller {
         });
     }
 };
+__decorate([
+    (0, tsoa_1.Get)("/leaderboard"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], GameController.prototype, "getLeaderboard", null);
 __decorate([
     (0, tsoa_1.Post)(""),
     __param(0, (0, tsoa_1.Body)()),

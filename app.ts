@@ -10,7 +10,7 @@ import "reflect-metadata";
 
 export const app = express();
 // Use body parser to read sent json payloads
-// const whiteList = ["https://games.kraftylab.com"];
+// const whiteList = ["https://games.tatewalker.com"];
 // const corsOptions = {
 //   origin: function (origin: any, callback: any) {
 //     if (whiteList.indexOf(origin) !== -1) {
@@ -46,6 +46,7 @@ app.use(function errorHandler(
   next: NextFunction
 ): ExResponse | void {
   if (err instanceof Error) {
+    console.log(err);
     return res.status(500).json({
       message: "Internal Server Error",
     });
