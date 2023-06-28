@@ -9,7 +9,8 @@ COPY . .
 RUN npm ci --production
 
 RUN npm run build
-COPY ./src/config/config.js .build/src/config/config.js
+RUN mkdir ./build/src/config
+COPY ./src/config/config.js ./build/src/config/config.js
 EXPOSE 3001
-EXPOSE 6969
+EXPOSE 4242
 CMD ["node", "build/server.js"]

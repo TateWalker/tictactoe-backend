@@ -14,7 +14,7 @@ httpServer.listen(port, () =>
 );
 
 let server = http.createServer(app);
-server.listen(6969);
+server.listen(4242);
 server.on("error", onError);
 server.on("listening", onListening);
 const io = socketServer(server);

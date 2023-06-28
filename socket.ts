@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 export default (httpServer: any) => {
   const io = new Server(httpServer, {
     cors: {
-      origin: "https://games.tatewalker.com",
+      origin: "http://localhost",
     },
   });
 
