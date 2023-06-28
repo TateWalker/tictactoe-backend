@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 export default (httpServer: any) => {
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost",
+      origin: "http://localhost:9000",
     },
   });
 
